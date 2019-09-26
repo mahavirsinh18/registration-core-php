@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+	function myFun() {
+		//var x = "Name:<input type='text' name='inpt' id='inpt2'>"
+		//x += "<button>(-)</button>"
+		document.getElementById("field").innerHTML += "<input type='text'>";	
+	}
+</script>	
+<style>
+	button {
+		background-color: silver;
+		border: none;
+		border-radius: 50%;
+		box-shadow: 1px 1px 5px black;
+	}
+	#inpt1 {
+		border: 2px solid gray;
+	}
+	span {
+		font-size: 18px;
+		color: black;
+		text-shadow: 1px 1px 2px gray;
+	}
+</style>
+</head>
+
+<body>
+	<div align="center">
+		<form>
+			<span>Name:</span><input type="text" name="inpt" id="inpt1">
+			<button type="button" onclick="myFun()"><b>+</b></button>
+		</form><br>
+		<div id="field"></div>
+	</div>
+</body>
+</html>

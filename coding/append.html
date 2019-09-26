@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<style>
+		#inpt1,#inpt2 {
+			border-radius: 7px;
+			box-shadow: 1px 1px 5px orange;
+		}
+		#btn1,#btn2 {
+			border-radius: 50%;
+			border: 2px solid black;
+			box-shadow: 1px 1px 5px black;
+		}
+		span {
+			color: orange;
+			font-size: 20px;
+			font-weight: bold;
+			text-shadow: 1px 1px 5px black;
+		}
+	</style>
+	
+	<div class="container d-flex justify-content-center">
+		<form>
+			<div class="form-group">
+				<label for="name"><span>Name:</span></label>
+				<input type="text" name="inpt" id="inpt1" style="border-color: orange">
+				<button type="button" id="btn1" style="background-color: lightgreen"><b>+</b></button>
+			</div>
+			<div id="field"></div>
+		</form>
+	</div>
+</body>
+<script>
+	$(document).ready(function(){
+		$("#btn1").click(function(){
+			var html = "<div class='form-group'>"
+				html += "<label for='name'>Name:</label>"
+				html += "<input type='text' name='inpt' id='inpt2' style='border-color: orange'>"
+				html += "<button type='button' id='btn2' style='background-color: red'><b>--</b></button>"
+			html += "</div>"
+			$("#field").append(html);
+		});
+		$(document).on("click", "#btn2", function(){
+			$(this).closest(".form-group").remove();
+		});
+	})
+</script>
+</html>

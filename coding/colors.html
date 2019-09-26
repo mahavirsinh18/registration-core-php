@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){ 
+		$("#btn1").css("background-color", "red");
+		$(btn2).css("background-color", "blue");
+		$(btn3).css("background-color", "green");
+		$(btn4).css("background-color", "yellow");
+		$(btn1).click(function(){
+			$(container).css("background-color", "red");
+		})	
+		$(btn2).click(function(){
+			$(container).css("background-color", "blue");
+		})
+		$(btn3).click(function(){
+			$(container).css("background-color", "green");
+		})
+		$(btn4).click(function(){
+			$(container).css("background-color", "yellow");
+		})
+		$(btn5).click(function(){
+			var name=$("#usr").val();
+			var reg=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+			var color=$("input[name=color]:checked").val();
+			if(name==""){
+				alert("input is empty");
+				return false;
+			}
+			if(!reg.test(name)){
+				alert("please enter valid email");
+				return false;
+			}
+			var html="<span class='uinp' style='color:"+color+"'>"+name+"</span><br>";
+			$("#addname").append(html);
+			$("#usr").val("");
+		});
+	});
+</script>
+<style>
+	button {
+		padding: 30px;
+		border: 2px solid black;
+		border-radius: 10px;
+		font-size: 20px;
+	}
+	#color {
+		display: flex;
+		justify-content: space-around;
+		padding: 20px;
+		border-radius: 20px;	
+	}
+
+</style>
+</head>
+
+<body>
+	<div id="container">
+		<div id="color">
+			<input type="radio" name="color" value="red" checked="">Red
+			<input type="radio" name="color" value="blue">Blue
+			<input type="radio" name="color" value="green">Green
+			<input type="radio" name="color" value="yellow">Yellow
+			<button type="button" id="btn1">RED</button>
+			<button type="button" id="btn2">BLUE</button>
+			<button type="button" id="btn3">GREEN</button>
+			<button type="button" id="btn4">YELLOW</button>
+		</div>
+	</div>
+	<hr><br>
+	<form id="name">
+		Name:<input type="text" name="usr" id="usr">
+		<input type="button" id="btn5" name="btn" value="Add">
+		<input type="reset" value="Reset" id="rst"><br><br>
+		<div id="addname"></div>
+	</form>
+	
+</body>
+</html>

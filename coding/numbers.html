@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+</head>
+<style type="text/css">
+	.sp:nth-child(even) {background: #CCC}
+.sp:nth-child(odd) {background: #FFF}
+</style>
+<body>
+
+	<form>
+		Number:<input type="text" name="numb" id="numb">
+		<span id="msg" style="color: red;"></span><br>
+		<input type="button" name="sub" value="Add" id="sub"><br><br>
+	</form>
+	<div id="txtbox">
+		
+	</div>
+</body>
+<script>
+	$(document).ready(function(){
+		$("#sub").click(function(){
+			var a = $("#numb").val();
+			if(a==""){
+				alert("enter any number")
+				return false;
+			}
+			if (!(/^[-+]?\d*\.?\d*$/.test(a))){
+            	alert('Please enter any number.')
+            }  
+            var i;
+       		for(i=0;i<a;i++){
+
+	       		var html="<span><input type='text' id='id"+i+"'></span><br>";
+	       		//var html="<span class='sp'>Test</span>\n";
+	       		$("#txtbox").append(html);
+       		}
+		})
+	})
+
+</script>
+</html>

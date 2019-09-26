@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div class="container d-flex justify-content-center">
+	<form id="frmid">
+		<div class="form-group">
+			<label for="email">E-mail:</label>
+			<input type="email" name="email" id="email1">
+			<button type="button" id="btn1">+</button>
+		</div>
+		<div id="ifield"></div>
+	</form>
+	</div>
+</body>
+<script>
+	$(document).ready(function(){
+		$("#btn1").click(function(){
+			var html="<div class='form-group'>";
+					html+="<label for='email'>E-mail:</label>";
+					html+="<input type='email' name='email' id='email3'>";
+					html+="<button type='button' class='rmv'>-</button>";
+				html+="</div>";
+			$("#ifield").append(html);
+		});
+		$(document).on("click",".rmv",function(){
+			$(this).closest(".form-group").remove();
+		});
+	})
+</script>
+</html>
