@@ -21,17 +21,34 @@ $Oldvalue = $_POST;
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+  	<style type="text/css">
+  		.error {color: red;}
+  	</style>
 </head>
 <body>
 
+<script type="text/javascript">
+	function PreviewImage() {
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(document.getElementById("stud_image").files[0]);
+        oFReader.onload = function (oFREvent) {
+            document.getElementById("uploadPreview").src = oFREvent.target.result;
+        };
+    };
+</script>
+
 <div class="container">
 	<form action="" method="post" id="myForm" class="form-horizontal" enctype="multipart/form-data">
+
+		<input type="hidden" name="update_id" class="update_id" value="0">
+
 		<div class="form-group">
 			Name:
 			<input type="text" name="name" id="name" class="form-control w-25" value="<?php echo isset($Oldvalue['name']) ? $Oldvalue['name'] : ''; ?>">
 			<span id="error"></span>
 		</div>
 
+		<div id="gender">
 		Gender:
 		<div class="custom-control custom-radio custom-control-inline">
 			<input type="radio" name="gender" id="gen1" class="custom-control-input" value="Male" <?php echo (isset($Oldvalue['gender']) && $Oldvalue['gender'] == 'Male') ? 'checked' : ''; ?> >
@@ -41,8 +58,9 @@ $Oldvalue = $_POST;
 			<input type="radio" name="gender" id="gen2" class="custom-control-input" value="Female" <?php echo (isset($Oldvalue['gender']) && $Oldvalue['gender'] == 'Female') ? 'checked' : ''; ?> >
 			<label for="gen2" class="custom-control-label">Female</label>
 		</div>
+		</div>
 		<span id="error"></span>
-		<br><br>
+		<br>
 
 		<?php $country_id = getCountry(); ?>
 		<select name="country_id" id="country_id" class="custom-select w-25">
@@ -53,8 +71,9 @@ $Oldvalue = $_POST;
 				}
 			?>
 		</select>
+		<br>
 		<span id="error"></span>
-		<br><br>
+		<br>
 
 		<select name="state_id" id="state_id" class="custom-select w-25">
 			<option value="">State</option>
@@ -78,13 +97,25 @@ $Oldvalue = $_POST;
 		<br><br>
 
 		<div class="custom-file w-25">
-			<input type="file" name="stud_image" id="file" class="custom-file-input">
-			<label for="file" class="custom-file-label">Choose image</label>
+			<input type="hidden" name="tmp_image" id="tmp_image">
+			<input type="file" name="stud_image" id="stud_image" class="custom-file-input" onchange="PreviewImage();">
+			<label for="stud_image" class="custom-file-label">Choose image</label>
 		</div>
+		<img id="uploadPreview" style="width: 100px; height: 100px;"/>
 		<span id="error"></span>
 		<br><br>
 
 		<button type="submit" id="submit" value="Submit" class="btn btn-outline-primary">Submit</button>
+		<br><br><br>
+		<hr>
+
+		<input type="hidden" id="page" value="1">
+		<input type="hidden" id="sortdir" value="desc">
+		<input type="hidden" id="orderby" value="id">
+		<input type="text" name="search" class="form-control w-25" id="search" value="<?php echo !empty($_GET['search']) ? $_GET['search'] : ''; ?>">
+		<br>
+		<button type="button" onclick="datalist()" name="searchbtn" id="searchbtn" class="btn btn-outline-primary" value="Search">Search</button>
+	
 		<div id="response"></div>
 	</form>
 </div>
@@ -92,46 +123,124 @@ $Oldvalue = $_POST;
 </body>
 
 <script type="text/javascript">
-	$('body').on('click','#submit',function(event){
-		event.preventDefault();
-		var formData = new FormData($('#myForm')[0]);
+	$(document).ready(function(){
+	$("#myForm").submit(function(event){
+		event.preventDefault(); //prevent default action
+		var request_method = $(this).attr("method");  //get form method
+		var form_data = new FormData(this);
 
-		$.ajax({
-			url: "connect.php?action=fdata",
-			type: "post",
-			data: formData,
-			contentType: false,
-			cache: false,
-			processData: false,
-			success: function(data){
-				$("#myForm")[0].reset();
+		$('form[id="myForm"]').validate({
+			rules: {
+				name: 'required',
+				gender: 'required',
+				country_id: 'required',
+				stud_image: 'required'
+			},
+			messages: {
+				name: 'please enter your name',
+				gender: '',
+				country_id: 'please select country',
+				stud_image: 'please choose any image',
+			},
+			submitHandler: function(form){
+				$.ajax({
+					url : "connect.php?action=fdata",
+					type : request_method,
+					data : form_data,
+					contentType : false,
+					cache : false,
+					processData : false,
+					success : function(data){
+						$("#myForm")[0].reset();
+						datalist();
+					}
+				});
 			}
 		});
 	});
+	});
 
+/////listing/////
 function datalist(){
-	search = $('.search').val();
-	page = $('.page').val();
-	orderby = $('.orderby').val();
-	sortdir = $('.sortdir').val();
 	$.ajax({
 		type : "post",
 		url : "ajax_list.php",
-		data : {
-			search:search,
-    		page:page,
-    		orderby:orderby,
-    		sortdir:sortdir
-    		},
+		data:{
+			page:$('#page').val(),
+			search:$('#search').val(),
+			orderby:$('#orderby').val(),
+			sortdir:$('#sortdir').val()
+		},
 		success: function(data){
 			$("#response").html(data);
 		}
 	});
 }
 
-$(document).ready(function){
+////searching
+$('#searchbtn').click(function(){
+	$('#page').val('1');
 	datalist();
-}
+});
+
+////pagination
+$('body').on('click','.page-link',function(){
+	$('#page').val($(this).html());
+	datalist();
+	return false;
+});
+
+////sorting
+$('body').on('click','.column',function(){
+	$('#orderby').val($(this).attr('data-name'));
+	$('#sortdir').val($(this).attr('data-direction'));
+	datalist();
+});
+
+$(document).ready(function(){
+	datalist();
+});
+
+/////delete/////
+$('body').on('click','.delete',function(){
+	if(confirm("Are you sure?")){
+		var id = $(this).attr("delete-id");
+		//alert(id);
+		$.ajax({
+	    	type: "post",
+	    	url: "ajax_delete.php",
+	    	data: {id: id},
+	    	success:function(data){
+	    		datalist();
+	    	}
+		});
+		return false;
+	}
+    return false;
+});
+
+/////update/////
+$('body').on('click','.update',function(){
+	$.ajax({
+		type: "get",
+		url: $(this).attr('href'),
+		dataType: 'json',
+		success: function(data){
+			$('#name').val(data.name);
+			$('#gender').val(data.gender);
+			$('#country_id').val(data.country_id);
+			$('#state_id').val(data.state_id);
+			$('#tmp_image').val(data.tmp_image);
+			if(data.stud_image != "")
+				$('#uploadPreview').attr('src', data.stud_image);
+			else
+				$('#uploadPreview').attr('src', "");
+			$('#update_id').val(data.id);
+		}
+	});
+	return false;
+});
+
 </script>
 
 </html>
