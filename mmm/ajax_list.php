@@ -63,7 +63,7 @@ $sortdir = "DESC";
 			<td><?php echo $row['gender']; ?></td>
 			<td><?php echo $row['country_id']; ?></td>
 			<td><?php echo $row['state_id']; ?></td>
-			<td><img src="uploads/<?php if($row['stud_image']!=''){ echo $row['stud_image'];} else{echo "noimage.jpg";} ?>" heigth="50" width="50"></td>		
+			<td><img src="uploads/<?php if($row['stud_image'] != ''){ echo $row['stud_image'];} else{echo "noimage.jpg";} ?>" heigth="50" width="50"></td>		
 			<td>
 				<a class="update" href="ajax_update.php?id=<?php echo $row['id']; ?>">Update</a> | <a class="delete" href="" delete-id="<?php echo $row['id']; ?>">Delete</a>
 			</td>
@@ -104,7 +104,10 @@ $sortdir = "DESC";
 
 	?><div class="row justify-content-center"><?php
 	for($i=1; $i<=$total_pages; $i++){
-		$pageLink .= "<a href='' class='btn btn-outline-primary space page-link'>".$i."</a>";
+		$active = "";
+		if($page == $i)
+			$active = 'active';
+		$pageLink .= "<a href='' class='btn btn-outline-primary space page-link ".$active."'>".$i."</a>";
 	}	
 	echo $pageLink . "";
 	?></div><?php
